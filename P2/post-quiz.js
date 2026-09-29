@@ -87,15 +87,28 @@ const secondStageQuestions = [
     'A base polar vai iniciar um novo projeto. Qual tarefa mais combina com você?',
     'Uma descoberta importante precisa chegar a outras equipes. Como você ajuda?',
     'O plano da expedição muda de repente. Qual atitude representa você?',
-    'Qual arquétipo de urso polar mais combina com seu jeito de explorar o mundo?'
+    'Com qual urso você mais se identifica?'
 ];
 
-const archetypes = [
-    ['b', 'Explorador|Curioso e independente, sempre procura novas rotas.', 'img/ursos/urso-explorador.png'],
-    ['a', 'Estrategista|Observador e analítico, pensa antes de decidir.', 'img/ursos/urso-observador.png'],
-    ['a', 'Guardião|Responsável e atento à segurança de todo o grupo.', 'img/ursos/urso-protetor.png'],
-    ['b', 'Acolhedor|Empático e colaborativo, cuida do bem-estar de todos.', 'img/ursos/urso-adaptavel.png']
+const bearProfiles = [
+    { key: 'explorador', name: 'Explorador', group: 'b', src: '../img/ursos/urso-explorador.png' },
+    { key: 'navegador', name: 'Navegador', group: 'b', src: '../img/ursos/urso-navegador.png' },
+    { key: 'pioneiro', name: 'Pioneiro', group: 'b', src: '../img/ursos/urso-pioneiro.png' },
+    { key: 'estrategista', name: 'Estrategista', group: 'a', src: '../img/ursos/urso-estrategista.png' },
+    { key: 'observador', name: 'Observador', group: 'a', src: '../img/ursos/urso-observador.png' },
+    { key: 'analista', name: 'Analista', group: 'a', src: '../img/ursos/urso-analista.png' },
+    { key: 'guardiao', name: 'Guardião', group: 'a', src: '../img/ursos/urso-guardiao.png' },
+    { key: 'protetor', name: 'Protetor', group: 'a', src: '../img/ursos/urso-protetor.png' },
+    { key: 'lider', name: 'Líder', group: 'a', src: '../img/ursos/urso-lider.png' },
+    { key: 'acolhedor', name: 'Acolhedor', group: 'b', src: '../img/ursos/urso-acolhedor.png' },
+    { key: 'adaptavel', name: 'Adaptável', group: 'b', src: '../img/ursos/urso-adaptavel.png' },
+    { key: 'conector', name: 'Conector', group: 'b', src: '../img/ursos/urso-conector.png' }
 ];
+
+const portraitsBySide = {
+    a: bearProfiles.filter(profile => profile.group === 'a'),
+    b: bearProfiles.filter(profile => profile.group === 'b')
+};
 
 const quiz = document.querySelector('.polar-quiz');
 const variant = variants[quiz.dataset.variant];
@@ -123,24 +136,41 @@ if (stage === 1) {
 function renderQuestion() {
     const questionNumber = stage === 1 ? questionIndex + 1 : questionIndex + 4;
     const question = questions[questionIndex];
-    const options = stage === 1 || questionIndex < 3
-        ? answerSets[questionIndex]
-        : archetypes.map(([side, answer, image]) => [side, answer, image]);
-
     count.textContent = `PERGUNTA ${questionNumber} DE 7`;
     progress.setAttribute('aria-valuenow', String(questionNumber));
     progressFill.style.width = `${(questionNumber / 7) * 100}%`;
+
+    if (stage === 2 && questionIndex === questions.length - 1) {
+        content.innerHTML = `
+            <h1 class="question-title">${question}</h1>
+            <div class="bear-selection-grid" role="group" aria-label="Escolha um urso">
+                ${bearProfiles.map(profile => `
+                    <button class="bear-option-tile" type="button" data-side="${profile.group}" title="${profile.name}" aria-label="${profile.name}">
+                        <img src="${profile.src}" alt="${profile.name}">
+                        <span class="bear-option-name">${profile.name}</span>
+                    </button>
+                `).join('')}
+            </div>
+        `;
+
+        content.querySelectorAll('.bear-option-tile').forEach(option => {
+            option.addEventListener('click', () => selectAnswer(option.dataset.side));
+        });
+        return;
+    }
+
+    const options = answerSets[questionIndex];
     content.innerHTML = `
         <h1 class="question-title">${question}</h1>
         <div class="answer-list" role="group" aria-label="Alternativas">
-            ${options.map(([side, answer, image], index) => {
-                const [label, description] = answer.split('|');
-                const portrait = image ? `<img class="answer-portrait" src="${image}" alt="${label}">` : '';
+            ${options.map(([side, answer], index) => {
+                const portraitOptions = portraitsBySide[side] || bearProfiles;
+                const portrait = portraitOptions[(questionNumber + index - 1) % portraitOptions.length];
                 return `<button class="answer-option" type="button" data-side="${side}">
                     <span class="answer-index">0${index + 1}</span>
-                    <span class="answer-copy ${image ? 'answer-copy-portrait' : ''}">
-                        ${portrait}
-                        <span class="answer-text">${description ? `<strong>${label}</strong><span>${description}</span>` : answer}</span>
+                    <span class="answer-copy answer-copy-portrait">
+                        <img class="answer-portrait" src="${portrait.src}" alt="">
+                        <span class="answer-text"><span>${answer}</span></span>
                     </span>
                     <span class="answer-arrow" aria-hidden="true">&#8594;</span>
                 </button>`;

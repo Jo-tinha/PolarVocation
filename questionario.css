@@ -170,14 +170,10 @@ a {
 .answer-text {
     display: grid;
     gap: 3px;
+    color: var(--navy);
 }
 
-.answer-copy strong {
-    font-family: 'Manrope', sans-serif;
-    font-size: 1rem;
-}
-
-.answer-copy span {
+.answer-text span {
     color: var(--muted);
     font-size: .86rem;
 }
@@ -185,6 +181,96 @@ a {
 .answer-arrow {
     color: var(--blue);
     font-size: 1.15rem;
+}
+
+.bear-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(90px, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+    padding: 12px;
+}
+
+.bear-option-tile {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 126px;
+    padding: 12px 10px 18px;
+    border: 1px solid rgba(22, 55, 70, .08);
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, .96), rgba(234, 247, 250, .86));
+    box-shadow: 0 12px 22px rgba(22, 55, 70, .08), inset 0 1px 0 rgba(255, 255, 255, .8);
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    overflow: hidden;
+}
+
+.bear-option-tile:nth-child(odd) {
+    transform: translateY(8px);
+}
+
+.bear-option-tile:nth-child(even) {
+    transform: translateY(-6px);
+}
+
+.bear-option-tile:hover,
+.bear-option-tile:focus-visible {
+    transform: translateY(-4px) scale(1.02);
+    border-color: rgba(40, 125, 145, .35);
+    box-shadow: 0 20px 32px rgba(22, 55, 70, .12);
+    outline: none;
+}
+
+.bear-option-tile:nth-child(odd):hover,
+.bear-option-tile:nth-child(odd):focus-visible {
+    transform: translateY(-12px) scale(1.02);
+}
+
+.bear-option-tile:nth-child(even):hover,
+.bear-option-tile:nth-child(even):focus-visible {
+    transform: translateY(-10px) scale(1.02);
+}
+
+.bear-option-tile img {
+    width: 78px;
+    height: 78px;
+    object-fit: cover;
+    border-radius: 18px;
+    background: #f3f9fb;
+    filter: drop-shadow(0 8px 12px rgba(22, 55, 70, .12));
+}
+
+.bear-option-name {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    padding: 6px 8px;
+    border-radius: 999px;
+    background: rgba(16, 55, 70, .82);
+    color: white;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .18s ease, transform .18s ease;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.bear-option-tile:hover .bear-option-name,
+.bear-option-tile:focus-visible .bear-option-name {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 520px) {
+    .bear-selection-grid {
+        grid-template-columns: repeat(2, minmax(100px, 1fr));
+        gap: 12px;
+    }
 }
 
 .quiz-hint,

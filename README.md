@@ -27,13 +27,26 @@ Projeto do teste vocacional com visual de urso polar e uma jornada interativa pa
 
 ## Arquivos de personalidade polar
 
-Os perfis do questionário podem usar imagens com nomes padronizados em `img/ursos/` para representar os arquétipos:
+Os perfis do questionário usam uma biblioteca de tipos de urso em `img/ursos/` para reforçar o estilo visual de cada resposta e do arquétipo final:
 
-| Arquivo | Uso |
-| --- | --- |
-| `urso-observador.png` | estratégia e atenção ao ambiente |
-| `urso-explorador.png` | curiosidade e busca por desafios |
-| `urso-protetor.png` | cuidado, liderança e proteção |
-| `urso-adaptavel.png` | flexibilidade e adaptação |
+| Arquivo | Perfil | Uso |
+| --- | --- | --- |
+| `urso-observador.png` | Observador | estratégia, análise e atenção ao ambiente |
+| `urso-explorador.png` | Explorador | curiosidade, autonomia e busca por novas rotas |
+| `urso-protetor.png` | Protetor | cuidado, liderança e segurança do grupo |
+| `urso-adaptavel.png` | Adaptável | empatia, flexibilidade e conexão com as pessoas |
+
+Além disso, o sistema também trabalha com variações de identidade visual para cada eixo da jornada, como:
+
+- `Explorador`, `Navegador` e `Pioneiro`
+- `Estrategista`, `Observador` e `Analista`
+- `Guardião`, `Protetor` e `Líder`
+- `Acolhedor`, `Adaptável` e `Conector`
 
 Se esses arquivos não existirem, o sistema usa um urso polar de fallback para manter a experiência funcional.
+
+## Atualização recente
+
+- Expansão da biblioteca de imagens de urso para os perfis e respostas do quiz.
+- Aplicação desses perfis em todas as etapas do questionário e no pós-2º mini game.
+- Ajuste visual dos cards com imagem + descrição para reforçar a narrativa de cada resposta.

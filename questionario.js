@@ -1,3 +1,18 @@
+const bearProfiles = [
+    { key: 'explorador', name: 'Explorador', group: 'GRP1', src: 'img/ursos/urso-explorador.png' },
+    { key: 'navegador', name: 'Navegador', group: 'GRP1', src: 'img/ursos/urso-navegador.png' },
+    { key: 'pioneiro', name: 'Pioneiro', group: 'GRP1', src: 'img/ursos/urso-pioneiro.png' },
+    { key: 'estrategista', name: 'Estrategista', group: 'GRP2', src: 'img/ursos/urso-estrategista.png' },
+    { key: 'observador', name: 'Observador', group: 'GRP2', src: 'img/ursos/urso-observador.png' },
+    { key: 'analista', name: 'Analista', group: 'GRP2', src: 'img/ursos/urso-analista.png' },
+    { key: 'guardiao', name: 'Guardião', group: 'GRP3', src: 'img/ursos/urso-guardiao.png' },
+    { key: 'protetor', name: 'Protetor', group: 'GRP3', src: 'img/ursos/urso-protetor.png' },
+    { key: 'lider', name: 'Líder', group: 'GRP3', src: 'img/ursos/urso-lider.png' },
+    { key: 'acolhedor', name: 'Acolhedor', group: 'GRP4', src: 'img/ursos/urso-acolhedor.png' },
+    { key: 'adaptavel', name: 'Adaptável', group: 'GRP4', src: 'img/ursos/urso-adaptavel.png' },
+    { key: 'conector', name: 'Conector', group: 'GRP4', src: 'img/ursos/urso-conector.png' }
+];
+
 const questions = [
     {
         title: 'Na primeira manhã de uma expedição no Ártico, qual tarefa combina com você?',
@@ -52,15 +67,6 @@ const questions = [
             ['GRP3', 'Guiar a equipe para um abrigo bem preparado.'],
             ['GRP4', 'Apoiar quem está preocupado e manter todos juntos.']
         ]
-    },
-    {
-        title: 'Qual arquétipo de urso polar mais parece com você?',
-        options: [
-            ['GRP1', 'Urso Explorador|Curioso, independente e sempre pronto para descobrir novos caminhos.'],
-            ['GRP2', 'Urso Estrategista|Observador, analítico e cuidadoso antes de tomar decisões.'],
-            ['GRP3', 'Urso Guardião|Líder, responsável e atento à segurança do grupo.'],
-            ['GRP4', 'Urso Acolhedor|Empático, colaborativo e dedicado ao bem-estar de todos.']
-        ]
     }
 ];
 
@@ -70,11 +76,11 @@ const questionCount = document.getElementById('question-count');
 const progressTrack = document.querySelector('.progress-track');
 const progressFill = document.getElementById('progress-fill');
 const questionContent = document.getElementById('question-content');
-const archetypeImages = {
-    GRP1: 'img/ursos/urso-explorador.png',
-    GRP2: 'img/ursos/urso-observador.png',
-    GRP3: 'img/ursos/urso-protetor.png',
-    GRP4: 'img/ursos/urso-adaptavel.png'
+const groupPortraits = {
+    GRP1: ['explorador', 'navegador', 'pioneiro', 'observador', 'analista', 'estrategista', 'adaptavel', 'conector', 'acolhedor', 'guardiao', 'lider', 'protetor'],
+    GRP2: ['estrategista', 'observador', 'analista', 'navegador', 'pioneiro', 'explorador', 'lider', 'protetor', 'guardiao', 'adaptavel', 'conector', 'acolhedor'],
+    GRP3: ['guardiao', 'protetor', 'lider', 'estrategista', 'analista', 'observador', 'adaptavel', 'acolhedor', 'conector', 'explorador', 'navegador', 'pioneiro'],
+    GRP4: ['acolhedor', 'adaptavel', 'conector', 'protetor', 'lider', 'explorador', 'navegador', 'pioneiro', 'observador', 'analista', 'estrategista', 'guardiao']
 };
 const scoreKey = 'pontuacao';
 const stepKey = 'polarQuizStep';
@@ -83,7 +89,30 @@ let score = JSON.parse(localStorage.getItem(scoreKey)) || { ...initialScore };
 let questionIndex = part === 1 ? 0 : 4;
 
 if (part === 2) {
-    questionIndex = Math.max(4, Math.min(6, Number(localStorage.getItem(stepKey)) || 4));
+    questionIndex = Math.max(4, Math.min(5, Number(localStorage.getItem(stepKey)) || 4));
+}
+
+function getPortraitsForQuestion(targetIndex) {
+    const usedByPosition = Array.from({ length: 4 }, () => new Set());
+    let portraits = [];
+
+    for (let currentIndex = 0; currentIndex <= targetIndex; currentIndex += 1) {
+        const usedInQuestion = new Set();
+        portraits = questions[currentIndex].options.map(([group], position) => {
+            const candidates = (groupPortraits[group] || [])
+                .map(key => bearProfiles.find(profile => profile.key === key))
+                .filter(Boolean);
+            const profile = candidates.find(candidate =>
+                !usedByPosition[position].has(candidate.key) && !usedInQuestion.has(candidate.key)
+            ) || candidates.find(candidate => !usedInQuestion.has(candidate.key));
+
+            usedByPosition[position].add(profile.key);
+            usedInQuestion.add(profile.key);
+            return profile;
+        });
+    }
+
+    return portraits;
 }
 
 function renderQuestion() {
@@ -92,19 +121,20 @@ function renderQuestion() {
     const progress = Math.round((current / questions.length) * 100);
 
     questionCount.textContent = `PERGUNTA ${current} DE ${questions.length}`;
+    progressTrack.setAttribute('aria-valuemax', String(questions.length));
     progressTrack.setAttribute('aria-valuenow', String(current));
     progressFill.style.width = `${progress}%`;
+    const portraits = getPortraitsForQuestion(questionIndex);
     questionContent.innerHTML = `
         <h1 class="question-title">${question.title}</h1>
         <div class="answer-list" role="group" aria-label="Alternativas">
             ${question.options.map(([group, answer], index) => {
-                const [label, description] = answer.split('|');
-                const image = group in archetypeImages ? archetypeImages[group] : '';
+                const portrait = portraits[index];
                 return `<button class="answer-option" type="button" data-group="${group}">
                     <span class="answer-index">0${index + 1}</span>
-                    <span class="answer-copy ${image ? 'answer-copy-portrait' : ''}">
-                        ${image ? `<img class="answer-portrait" src="${image}" alt="${label}">` : ''}
-                        <span class="answer-text">${description ? `<strong>${label}</strong><span>${description}</span>` : answer}</span>
+                    <span class="answer-copy answer-copy-portrait">
+                        <img class="answer-portrait" src="${portrait.src}" alt="">
+                        <span class="answer-text"><span>${answer}</span></span>
                     </span>
                     <span class="answer-arrow" aria-hidden="true">&#8594;</span>
                 </button>`;
