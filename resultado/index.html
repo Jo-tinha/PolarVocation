@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seu resultado | Vocação Polar</title>
+    <link rel="stylesheet" href="result-dynamic.css">
+</head>
+<body>
+    <main class="results-shell">
+        <header class="results-header">
+            <a class="results-brand" href="../index.html">VOCACAO POLAR</a>
+            <p class="results-kicker">LEITURA DA SUA EXPEDICAO</p>
+        </header>
+
+        <section class="result-hero" aria-labelledby="result-title">
+            <div class="hero-copy">
+                <p class="eyebrow">SEU MAPA POLAR</p>
+                <h1 id="result-title">Seu perfil esta tomando forma</h1>
+                <p id="result-summary" class="lead"></p>
+            </div>
+            <div class="selected-bear" id="selected-bear" aria-live="polite"></div>
+        </section>
+
+        <section class="result-grid" aria-label="Resumo do resultado">
+            <article class="result-panel course-panel">
+                <p class="eyebrow">CAMINHO SUGERIDO</p>
+                <h2 id="course-name"></h2>
+                <p id="course-description"></p>
+                <div class="score-meter" aria-label="Compatibilidade com o curso">
+                    <div id="course-meter"></div>
+                </div>
+                <strong id="course-score"></strong>
+            </article>
+            <article class="result-panel profile-panel">
+                <p class="eyebrow">URSO MAIS PROXIMO</p>
+                <h2 id="profile-name"></h2>
+                <p id="profile-description"></p>
+            </article>
+        </section>
+
+        <section class="result-panel chart-panel" aria-labelledby="profile-chart-title">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">DISTRIBUICAO DOS PERFIS</p>
+                    <h2 id="profile-chart-title">Como suas respostas se espalham</h2>
+                </div>
+                <span class="chart-note">12 perfis considerados</span>
+            </div>
+            <div id="profile-chart" class="profile-chart"></div>
+        </section>
+
+        <section class="result-panel course-chart-panel" aria-labelledby="course-chart-title">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">AREAS DE INTERESSE</p>
+                    <h2 id="course-chart-title">Cursos que combinaram com sua jornada</h2>
+                </div>
+            </div>
+            <div id="course-chart" class="course-chart"></div>
+        </section>
+
+        <footer class="results-footer">
+            <a class="primary-action" href="vestibulinho.html">Conhecer o Vestibulinho</a>
+            <a class="secondary-action" href="../index.html">Refazer a jornada</a>
+        </footer>
+    </main>
+    <script src="result-dynamic.js"></script>
+</body>
+</html>

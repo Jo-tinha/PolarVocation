@@ -145,7 +145,7 @@ function renderQuestion() {
             <h1 class="question-title">${question}</h1>
             <div class="bear-selection-grid" role="group" aria-label="Escolha um urso">
                 ${bearProfiles.map(profile => `
-                    <button class="bear-option-tile" type="button" data-side="${profile.group}" title="${profile.name}" aria-label="${profile.name}">
+                    <button class="bear-option-tile" type="button" data-side="${profile.group}" data-profile="${profile.key}" title="${profile.name}" aria-label="${profile.name}">
                         <img src="${profile.src}" alt="${profile.name}">
                         <span class="bear-option-name">${profile.name}</span>
                     </button>
@@ -154,7 +154,10 @@ function renderQuestion() {
         `;
 
         content.querySelectorAll('.bear-option-tile').forEach(option => {
-            option.addEventListener('click', () => selectAnswer(option.dataset.side));
+            option.addEventListener('click', () => {
+                localStorage.setItem('polarBearProfile', option.dataset.profile);
+                selectAnswer(option.dataset.side);
+            });
         });
         return;
     }
@@ -200,7 +203,8 @@ function selectAnswer(side) {
     }
 
     const winner = score[variant.aCode] >= score[variant.bCode] ? 0 : 1;
-    window.location.href = variant.results[winner];
+    localStorage.setItem('polarResultCourse', variant.results[winner].match(/result([A-Z0-9]+)\.html$/)?.[1] || variant.aCode);
+    window.location.href = `../resultado/index.html?course=${encodeURIComponent(variant.results[winner].match(/result([A-Z0-9]+)\.html$/)?.[1] || variant.aCode)}`;
 }
 
 renderQuestion();
