@@ -91,10 +91,10 @@ const secondStageQuestions = [
 ];
 
 const archetypes = [
-    ['b', 'Explorador', 'Curioso e independente, sempre procura novas rotas.'],
-    ['a', 'Estrategista', 'Observador e analítico, pensa antes de decidir.'],
-    ['a', 'Guardião', 'Responsável e atento à segurança de todo o grupo.'],
-    ['b', 'Acolhedor', 'Empático e colaborativo, cuida do bem-estar de todos.']
+    ['b', 'Explorador|Curioso e independente, sempre procura novas rotas.', 'img/ursos/urso-explorador.png'],
+    ['a', 'Estrategista|Observador e analítico, pensa antes de decidir.', 'img/ursos/urso-observador.png'],
+    ['a', 'Guardião|Responsável e atento à segurança de todo o grupo.', 'img/ursos/urso-protetor.png'],
+    ['b', 'Acolhedor|Empático e colaborativo, cuida do bem-estar de todos.', 'img/ursos/urso-adaptavel.png']
 ];
 
 const quiz = document.querySelector('.polar-quiz');
@@ -125,7 +125,7 @@ function renderQuestion() {
     const question = questions[questionIndex];
     const options = stage === 1 || questionIndex < 3
         ? answerSets[questionIndex]
-        : archetypes.map(([side, name, description]) => [side, `${name}|${description}`]);
+        : archetypes.map(([side, answer, image]) => [side, answer, image]);
 
     count.textContent = `PERGUNTA ${questionNumber} DE 7`;
     progress.setAttribute('aria-valuenow', String(questionNumber));
@@ -133,11 +133,15 @@ function renderQuestion() {
     content.innerHTML = `
         <h1 class="question-title">${question}</h1>
         <div class="answer-list" role="group" aria-label="Alternativas">
-            ${options.map(([side, answer], index) => {
+            ${options.map(([side, answer, image], index) => {
                 const [label, description] = answer.split('|');
+                const portrait = image ? `<img class="answer-portrait" src="${image}" alt="${label}">` : '';
                 return `<button class="answer-option" type="button" data-side="${side}">
                     <span class="answer-index">0${index + 1}</span>
-                    <span class="answer-copy">${description ? `<strong>${label}</strong><span>${description}</span>` : answer}</span>
+                    <span class="answer-copy ${image ? 'answer-copy-portrait' : ''}">
+                        ${portrait}
+                        <span class="answer-text">${description ? `<strong>${label}</strong><span>${description}</span>` : answer}</span>
+                    </span>
                     <span class="answer-arrow" aria-hidden="true">&#8594;</span>
                 </button>`;
             }).join('')}

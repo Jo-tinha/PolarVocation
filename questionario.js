@@ -70,6 +70,12 @@ const questionCount = document.getElementById('question-count');
 const progressTrack = document.querySelector('.progress-track');
 const progressFill = document.getElementById('progress-fill');
 const questionContent = document.getElementById('question-content');
+const archetypeImages = {
+    GRP1: 'img/ursos/urso-explorador.png',
+    GRP2: 'img/ursos/urso-observador.png',
+    GRP3: 'img/ursos/urso-protetor.png',
+    GRP4: 'img/ursos/urso-adaptavel.png'
+};
 const scoreKey = 'pontuacao';
 const stepKey = 'polarQuizStep';
 const initialScore = { GRP1: 0, GRP2: 0, GRP3: 0, GRP4: 0 };
@@ -93,9 +99,13 @@ function renderQuestion() {
         <div class="answer-list" role="group" aria-label="Alternativas">
             ${question.options.map(([group, answer], index) => {
                 const [label, description] = answer.split('|');
+                const image = group in archetypeImages ? archetypeImages[group] : '';
                 return `<button class="answer-option" type="button" data-group="${group}">
                     <span class="answer-index">0${index + 1}</span>
-                    <span class="answer-copy">${description ? `<strong>${label}</strong><span>${description}</span>` : answer}</span>
+                    <span class="answer-copy ${image ? 'answer-copy-portrait' : ''}">
+                        ${image ? `<img class="answer-portrait" src="${image}" alt="${label}">` : ''}
+                        <span class="answer-text">${description ? `<strong>${label}</strong><span>${description}</span>` : answer}</span>
+                    </span>
                     <span class="answer-arrow" aria-hidden="true">&#8594;</span>
                 </button>`;
             }).join('')}
