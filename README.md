@@ -1,14 +1,39 @@
 # PolarVocation
 
-## Imagens do questionário polar
+Projeto do teste vocacional com visual de urso polar e uma jornada interativa para descobrir o curso ideal.
 
-As telas de perguntas não usam mais as imagens antigas. O seletor final de arquétipos procura as imagens abaixo em `VocacaoPolar/img/ursos/`; enquanto elas não forem adicionadas, cada opção mostra um urso polar de fallback.
+## Como abrir
 
-| Arquivo | Representação sugerida |
+1. Abra a pasta do projeto no navegador ou rode um servidor local:
+   ```bash
+   python3 -m http.server 8000
+   ```
+2. Acesse: `http://localhost:8000`
+
+## Melhorias da experiência
+
+- Tutorial com etapas interativas na tela inicial.
+- Tema visual de gelo, neve e urso polar.
+- Layout mais claro para o formulário e a progressão do jogo.
+- Estrutura do projeto liberada na raiz do workspace, sem a pasta aninhada.
+
+## Estrutura principal
+
+- `index.html`: página inicial e tutorial interativo.
+- `style.css`: estilos base do site.
+- `polar-theme.css`: tema visual do urso polar.
+- `script.js`: lógica dos modais e seleção do tutorial.
+- `resultado/`: páginas de resultado e mini-jogos.
+
+## Arquivos de personalidade polar
+
+Os perfis do questionário podem usar imagens com nomes padronizados em `img/ursos/` para representar os arquétipos:
+
+| Arquivo | Uso |
 | --- | --- |
-| `urso-observador.png` | Urso polar atento ao gelo e às condições ao redor. |
-| `urso-explorador.png` | Urso polar atravessando o gelo marinho em busca de novos caminhos. |
-| `urso-protetor.png` | Ursa polar acompanhada de filhotes, representando cuidado e proteção. |
-| `urso-adaptavel.png` | Urso polar em um bloco de gelo, representando adaptação às mudanças do habitat. |
+| `urso-observador.png` | estratégia e atenção ao ambiente |
+| `urso-explorador.png` | curiosidade e busca por desafios |
+| `urso-protetor.png` | cuidado, liderança e proteção |
+| `urso-adaptavel.png` | flexibilidade e adaptação |
 
-Use ilustrações ou fotografias próprias/licenciadas, mantendo esses nomes para que o questionário carregue os arquivos automaticamente.
+Se esses arquivos não existirem, o sistema usa um urso polar de fallback para manter a experiência funcional.
